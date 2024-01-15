@@ -1,0 +1,46 @@
+import java.util.ArrayList;
+
+public class Solution {
+    public static int findPages(ArrayList<Integer> arr, int n, int m) {
+        if (n < m) {
+            return -1; 
+        }
+
+        int low = arr.stream().max(Integer::compareTo).get();
+        int high = arr.stream().mapToInt(Integer::intValue).sum();
+
+        int result = -1;
+
+        while (low <= high) {
+            int mid = low + (high - low) / 2;
+            if (isAllocationPossible(arr, n, m, mid)) {
+                result = mid;
+                high = mid - 1;
+            } else {
+                low = mid + 1;
+            }
+        }
+
+        return result;
+    }
+
+    private static boolean isAllocationPossible(ArrayList<Integer> arr, int n, int m, int maxPages) {
+        int studentsRequired = 1;
+        int currentPageSum = 0;
+
+        for (int i = 0; i < n; i++) {
+            if (arr.get(i) > maxPages) {
+                return false; 
+            }
+
+            if (currentPageSum + arr.get(i) > maxPages) {
+                studentsRequired++;
+                currentPageSum = 0;
+            }
+
+            currentPageSum += arr.get(i);
+        }
+
+        return studentsRequired <= m;
+    }
+}
