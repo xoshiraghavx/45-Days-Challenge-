@@ -1,0 +1,56 @@
+import java.util.ArrayList;
+
+public class Solution 
+{
+    public static int findLargestMinDistance(ArrayList<Integer> boards, int k)
+    {
+        int totalBoards = boards.size();
+        
+        int low = 0;
+        int high = 0;
+        
+        // Calculate the sum and find the maximum board length
+        for (int i = 0; i < totalBoards; i++) {
+            high += boards.get(i);
+            low = Math.max(low, boards.get(i));
+        }
+        
+        // Perform binary search to find the minimum time
+        while (low < high) {
+            int mid = low + (high - low) / 2;
+            
+            if (isValid(boards, k, mid)) {
+                // If the current mid value is valid, search in the left half
+                high = mid;
+            } else {
+                // If the current mid value is not valid, search in the right half
+                low = mid + 1;
+            }
+        }
+        
+        return low;
+    }
+    
+    private static boolean isValid(ArrayList<Integer> boards, int k, int mid) {
+        int painters = 1;
+        int currentLength = 0;
+        
+        for (int i = 0; i < boards.size(); i++) {
+            currentLength += boards.get(i);
+            
+            if (currentLength > mid) {
+                // If current painter's section exceeds the mid value, allocate a new painter
+                painters++;
+                currentLength = boards.get(i);
+            }
+            
+            if (painters > k) {
+                // If the number of painters exceeds the given limit, return false
+                return false;
+            }
+        }
+        
+        // If the distribution is possible within the given mid value, return true
+        return true;
+    }
+}
