@@ -1,0 +1,32 @@
+class Solution {
+    List<List<Integer>> combinations;
+    int[] candidatesArr;
+    int targetSum;
+
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        combinations = new ArrayList();
+        targetSum = target;
+        candidatesArr = candidates;
+
+        findCombinations(0, new ArrayList<Integer>(), target);
+
+        return combinations;
+    }
+
+    public void findCombinations(int candidate, ArrayList<Integer> current, int total) {
+        if (total == 0) {
+            combinations.add(new ArrayList<>(current));
+            return;
+        }
+
+        if (total < 0) {
+            return;
+        }
+
+        for (int i = candidate; i < candidatesArr.length; i++) {
+            current.add(candidatesArr[i]);
+            findCombinations(i, current, total - candidatesArr[i]);
+            current.remove(current.size() - 1);
+        }
+    }
+}
