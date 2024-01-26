@@ -1,0 +1,57 @@
+import java.util.Stack;
+
+public class Solution {
+    public int[] prevSmaller(int[] A) {
+        int n = A.length;
+        int[] G = new int[n];
+        Stack<Integer> stack = new Stack<>();
+
+        for (int i = 0; i < n; i++) {
+            // Pop elements from the stack while they are greater than or equal to the current element
+            while (!stack.isEmpty() && stack.peek() >= A[i]) {
+                stack.pop();
+            }
+
+            // If stack is not empty, the nearest smaller element is on top of the stack
+            if (!stack.isEmpty()) {
+                G[i] = stack.peek();
+            } else {
+                // If stack is empty, there is no smaller element to the left
+                G[i] = -1;
+            }
+
+            // Push the current element onto the stack
+            stack.push(A[i]);
+        }
+
+        return G;
+    }
+
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+
+        // Example 1
+        int[] A1 = {4, 5, 2, 10, 8};
+        int[] result1 = solution.prevSmaller(A1);
+        System.out.print("Output 1: [");
+        for (int i = 0; i < result1.length; i++) {
+            System.out.print(result1[i]);
+            if (i < result1.length - 1) {
+                System.out.print(", ");
+            }
+        }
+        System.out.println("]");
+
+        // Example 2
+        int[] A2 = {3, 2, 1};
+        int[] result2 = solution.prevSmaller(A2);
+        System.out.print("Output 2: [");
+        for (int i = 0; i < result2.length; i++) {
+            System.out.print(result2[i]);
+            if (i < result2.length - 1) {
+                System.out.print(", ");
+            }
+        }
+        System.out.println("]");
+    }
+}
