@@ -1,0 +1,43 @@
+class ItemComparator implements Comparator<Item>{
+    
+    @Override
+    public int compare(Item one, Item two){
+        
+        double fraction1 = (double) one.value / (double)one.weight;
+        double fraction2 = (double) two.value/ (double)two.weight;
+        
+        if(fraction1 < fraction2)
+         return 1;
+        else if(fraction1 > fraction2)
+         return -1;
+        else
+         return 0;
+    }
+}
+class Solution
+{
+    //Function to get the maximum total value in the knapsack.
+    
+     double fractionalKnapsack(int W, Item arr[], int n) {
+        Arrays.sort(arr, new ItemComparator()); 
+        
+        int curWeight = 0; 
+        double finalvalue = 0.0; 
+        
+        for (int i = 0; i < n; i++) {
+       
+            if (curWeight + arr[i].weight <= W) {
+                curWeight += arr[i].weight;
+                finalvalue += (double) arr[i].value;
+            }
+     
+            else {
+                int remain = W - curWeight;
+                finalvalue += ((double)arr[i].value / (double)arr[i].weight) * (double)remain;
+                break;
+            }
+        }
+     
+        return finalvalue;
+    }
+}
